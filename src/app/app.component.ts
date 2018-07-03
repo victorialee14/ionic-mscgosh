@@ -3,7 +3,7 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import 'chartjs-plugin-streaming';
+import { Streaming } from 'chartjs-plugin-streaming';
 
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -15,16 +15,32 @@ export class MyApp {
   rootPage:any = TabsPage;
 
   datasets: any[] = [{
-    data: []
+    label: 'Dataset 1',
+    lineTension: 0,
+    borderDash: [8, 4]
   }, {
-    data: []
+   label: 'Dataset 2'
   }];
   options: any = {
     scales: {
       xAxes: [{
         type: 'realtime'
       }]
-    }
+    },
+    plugins: {
+      streaming: {
+        onRefresh: function(chart: any) {
+          chart.data.datasets.forEach(function(dataset: any) {
+            dataset.data.push({
+              x: Date.now(),
+              y: Math.random()
+            });
+          });
+        },
+        delay: 2000
+   }
+ }
+}
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

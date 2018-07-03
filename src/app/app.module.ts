@@ -2,11 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
-import { NgModule } from '@angular/core';
-import { ChartsModule } from 'ng2-charts';
-
 import { MyApp } from './app.component';
-import { AppComponent } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -33,7 +29,6 @@ import { ChartsModule } from 'ng2-charts';
 ],
   bootstrap: [IonicApp],
   entryComponents: [
-    AppComponent,
     MyApp,
     AboutPage,
     ContactPage,
@@ -44,7 +39,6 @@ import { ChartsModule } from 'ng2-charts';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
 export class AppModule {}
