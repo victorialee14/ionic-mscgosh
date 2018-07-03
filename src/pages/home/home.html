@@ -4,18 +4,44 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <div class="row">
+<ion-content>
+  <div>
     <div class="col-md-6">
       <div style="display: block;">
-      <canvas baseChart width="300" height="200"
+        <ion-card>
+          <ion-card-header>
+          Live Chart
+          </ion-card-header>
+          <ion-card-content>
+      <canvas baseChart width="400" height="300"
                   [chartType]="'line'"
                   [datasets]="datasets"
                   [options]="options">
                   
       </canvas>
+    </ion-card-content>
+    </ion-card>
       </div>
-      <h1>yooo</h1>
+        <div padding>
+      <h3>Threat Level: </h3>
+    </div>
+      <ion-card>
+        <ion-card-header>
+          Bar Chart
+        </ion-card-header>
+        <ion-card-content>
+      <div style="display: block">
+    <canvas baseChart width="400" height="300"
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)"></canvas>
+  </div>
+</ion-card-content>
+</ion-card>
     </div>
   </div>
 </ion-content>
