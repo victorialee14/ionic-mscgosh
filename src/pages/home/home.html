@@ -9,8 +9,38 @@
     <div class="col-md-6">
       <div style="display: block;">
         <ion-card>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+              <ion-col>
+          <h4>Threat Level: </h4>
+          </ion-col>
+          <ion-col>
+            <h4>Events: </h4>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+          </ion-card-content>
+          </ion-card>
+          <ion-card>
+              <ion-card-content>
+          <ion-grid>
+            
+  <ion-row>
+    <ion-col>
+      Alerts: 
+    </ion-col>
+    <ion-col>
+      Reasons: 
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-card-content>
+</ion-card>
+<!--         Real-time graph -->
+        <ion-card>
           <ion-card-header>
-          Live Chart
+    {{date}}
           </ion-card-header>
           <ion-card-content>
       <canvas baseChart width="400" height="300"
@@ -22,12 +52,10 @@
     </ion-card-content>
     </ion-card>
       </div>
-        <div padding>
-      <h3>Threat Level: </h3>
-    </div>
+      <!--         Bar Chart -->
       <ion-card>
         <ion-card-header>
-          Bar Chart
+          Security things
         </ion-card-header>
         <ion-card-content>
       <div style="display: block">
@@ -42,6 +70,18 @@
   </div>
 </ion-card-content>
 </ion-card>
-    </div>
+<ion-card>
+  <ion-card-content>
+Other important things probably
+  <div style="display: block">
+    <canvas baseChart
+                [data]="doughnutChartData"
+                [labels]="doughnutChartLabels"
+                [chartType]="doughnutChartType"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)"></canvas>
+
+
   </div>
-</ion-content>
+</ion-card-content>
+</ion-card>

@@ -9,12 +9,17 @@ import 'chartjs-plugin-streaming';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
 
+  public date: string = new Date().toDateString();
+
   datasets: any[] = [{
-    data: [3,5,9,10]
+    data: [3,5,9,10],
+    label: 'Dataset 1'
   }, {
-    data: [2,6,32,1]
+    data: [2,6,32,1],
+    label: 'Dataset 2'
   }];
   options: any = {
     scales: {
@@ -32,7 +37,7 @@ export class HomePage {
   scaleShowVerticalLines: false,
   responsive: true
 };
-public barChartLabels:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+public barChartLabels:string[] = ['2012', '2013', '2014', '2015', '2016', '2017', '2018'];
 public barChartType:string = 'bar';
 public barChartLegend:boolean = true;
 
@@ -64,4 +69,9 @@ public randomize():void {
   clone[0].data = data;
   this.barChartData = clone;
 }
+
+// Doughnut
+public doughnutChartLabels:string[] = ['Data 1', 'Data 2', 'Data 3'];
+public doughnutChartData:number[] = [350, 450, 100];
+public doughnutChartType:string = 'doughnut';
 }
