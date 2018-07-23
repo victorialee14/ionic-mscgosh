@@ -13,25 +13,24 @@
             <ion-grid>
               <ion-row>
               <ion-col>
-          <h4>Threat Level: </h4>
+          <h4>Threat Level: <strong>2</strong></h4>
           </ion-col>
           <ion-col>
-            <h4>Events: </h4>
+            <h4>Events: <strong>3M</strong></h4>
           </ion-col>
         </ion-row>
-      </ion-grid>
+      <!-- </ion-grid>
           </ion-card-content>
           </ion-card>
           <ion-card>
               <ion-card-content>
-          <ion-grid>
-            
+          <ion-grid> --> 
   <ion-row>
     <ion-col>
-      Alerts: 
+      Alerts: <strong>16</strong>
     </ion-col>
     <ion-col>
-      Reasons: 
+      Sessions: <strong>50K</strong>
     </ion-col>
   </ion-row>
 </ion-grid>
@@ -44,9 +43,11 @@
           </ion-card-header>
           <ion-card-content>
       <canvas baseChart width="400" height="300"
-                  [chartType]="'line'"
-                  [datasets]="datasets"
-                  [options]="options">
+            [chartType]="'line'"
+            [datasets]="datasets"
+            [options]="options"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)">
                   
       </canvas>
     </ion-card-content>
@@ -55,7 +56,7 @@
       <!--         Bar Chart -->
       <ion-card>
         <ion-card-header>
-          Security things
+          Security info??????
         </ion-card-header>
         <ion-card-content>
       <div style="display: block">
@@ -70,9 +71,13 @@
   </div>
 </ion-card-content>
 </ion-card>
+
+<!--Doughnut Chart -->
 <ion-card>
+  <ion-card-header>
+    Other important things probably
+  </ion-card-header>
   <ion-card-content>
-Other important things probably
   <div style="display: block">
     <canvas baseChart
                 [data]="doughnutChartData"
@@ -82,6 +87,26 @@ Other important things probably
                 (chartClick)="chartClicked($event)"></canvas>
 
 
+  </div>
+</ion-card-content>
+</ion-card>
+
+<ion-card>
+<ion-card-content padding>
+  <div class="row">
+    <div class="col-md-6">
+      <div style="display: block;">
+      <canvas baseChart width="300" height="400"
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColors"
+                  [legend]="lineChartLegend"
+                  [chartType]="lineChartType"
+                  (chartHover)="chartHovered($event)"
+                  (chartClick)="chartClicked($event)"></canvas>
+      </div>
+    </div>
   </div>
 </ion-card-content>
 </ion-card>
