@@ -15,6 +15,20 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { ChartsModule } from 'ng2-charts';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { FIREBASE_INFO } from './firebase.info';
+
+/*var firebaseConf = {
+    apiKey: "AIzaSyCCFZOdqqvShmIWeWXwnjCa3xniqmR7ES4",
+    authDomain: "msc-gosh.firebaseapp.com",
+    databaseURL: "https://msc-gosh.firebaseio.com",
+    projectId: "msc-gosh",
+    storageBucket: "msc-gosh.appspot.com",
+    messagingSenderId: "178497536702"
+}*/
+
 @NgModule({
   declarations: [
     MyApp,
@@ -27,7 +41,10 @@ import { ChartsModule } from 'ng2-charts';
   imports: [
   BrowserModule,
   IonicModule.forRoot(MyApp),
-  ChartsModule
+  ChartsModule,
+  AngularFireAuthModule,
+  AngularFireModule.initializeApp(FIREBASE_INFO),
+  AngularFireDatabaseModule
 ],
   bootstrap: [IonicApp],
   entryComponents: [

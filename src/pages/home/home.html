@@ -4,8 +4,9 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <div>
+<ion-content padding>
+
+ <div>
     <div class="col-md-6">
       <div style="display: block;">
         <ion-card>
@@ -19,12 +20,12 @@
             <h4>Events: <strong>3M</strong></h4>
           </ion-col>
         </ion-row>
-      <!-- </ion-grid>
+      </ion-grid>
           </ion-card-content>
           </ion-card>
           <ion-card>
               <ion-card-content>
-          <ion-grid> --> 
+          <ion-grid>
   <ion-row>
     <ion-col>
       Alerts: <strong>16</strong>
@@ -36,8 +37,9 @@
 </ion-grid>
 </ion-card-content>
 </ion-card>
+
 <!--         Real-time graph -->
-        <ion-card>
+<ion-card>
           <ion-card-header>
     {{date}}
           </ion-card-header>
@@ -52,9 +54,18 @@
       </canvas>
     </ion-card-content>
     </ion-card>
-      </div>
+
+<ion-card>
+  <ion-card-header>Threat Events by Year</ion-card-header>
+  <canvas #lineCanvas></canvas>
+</ion-card>
+
+<ion-card>
+  <ion-card-header>Threat Events by Year</ion-card-header>
+  <canvas #barCanvas></canvas>
+</ion-card>
       <!--         Bar Chart -->
-      <ion-card>
+      <!-- <ion-card>
         <ion-card-header>
           Security info??????
         </ion-card-header>
@@ -70,12 +81,12 @@
             (chartClick)="chartClicked($event)"></canvas>
   </div>
 </ion-card-content>
-</ion-card>
+</ion-card> -->
 
 <!--Doughnut Chart -->
 <ion-card>
   <ion-card-header>
-    Other important things probably
+    Threat Events by Threat Level
   </ion-card-header>
   <ion-card-content>
   <div style="display: block">
@@ -93,6 +104,7 @@
 
 <ion-card>
 <ion-card-content padding>
+  <ion-card-header>Network Security</ion-card-header>
   <div class="row">
     <div class="col-md-6">
       <div style="display: block;">
