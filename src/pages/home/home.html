@@ -14,10 +14,15 @@
             <ion-grid>
               <ion-row>
               <ion-col>
-          <h4>Threat Level: <strong>2</strong></h4>
+          <h4>Threat Level: <strong>{{ defaultThreatVal }}</strong>
+<br>
+<br>
+          Predicted Threat Level: <strong>{{ prediction }} {{ outputThreat }}</strong>
+
+<input type="number" placeholder="Threat Events" (change)="predict($event.target.value)"></h4>
           </ion-col>
           <ion-col>
-            <h4>Events: <strong>3M</strong></h4>
+            <h4>Events: <strong>50</strong></h4>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -63,6 +68,11 @@
 <ion-card>
   <ion-card-header>Threat Events by Year</ion-card-header>
   <canvas #barCanvas></canvas>
+</ion-card>
+
+<ion-card>
+  <ion-card-header>Threat Events by Level</ion-card-header>
+  <canvas #threatLevelCanvas></canvas>
 </ion-card>
       <!--         Bar Chart -->
       <!-- <ion-card>

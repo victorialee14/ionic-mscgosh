@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Chart } from 'chart.js';
 import { Observable } from 'rxjs/Observable';
@@ -8,6 +8,8 @@ import firebase from 'firebase';
 
 import 'chartjs-plugin-streaming';
 
+import * as tf from '@tensorflow/tfjs';
+
 
 @Component({
   selector: 'page-home',
@@ -15,6 +17,58 @@ import 'chartjs-plugin-streaming';
 })
 
 export class HomePage {
+
+  linearModel: tf.Sequential;
+  prediction: any;
+
+  ngOnInit() {
+    this.train();
+  }
+
+
+  async train(): Promise<any> {
+     // Define a model for linear regression.
+  this.linearModel = tf.sequential();
+  this.linearModel.add(tf.layers.dense({units: 1, inputShape: [1]}));
+
+  // Prepare the model for training: Specify the loss and the optimizer.
+  this.linearModel.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+
+
+  // Training data, completely random stuff
+  const xs = tf.tensor1d([3, 4, 5]);
+  const ys = tf.tensor1d([6, 7, 8]);
+
+
+  // Train
+  await this.linearModel.fit(xs, ys)
+
+  console.log('model trained!')
+}
+
+  predict(val: number) {
+  const output = this.linearModel.predict(tf.tensor2d([val], [1, 1])) as any;
+  this.prediction = Array.from(output.dataSync())[0]
+
+  if (this.prediction > 5) {
+    this.prediction = "Critical";
+  }
+  else if (this.prediction > 4 && this.prediction <= 5) {
+    this.prediction = "Severe";
+  }
+  else if (this.prediction > 3 && this.prediction <= 4) {
+    this.prediction = "Elevated";
+  }
+  else if (this.prediction > 2 && this.prediction <= 3) {
+    this.prediction = "Moderate";
+  }
+  else {
+    this.prediction = "Low";
+  }
+}
+
+public defaultThreatVal: number = 2;
+
 
   @ViewChild('lineCanvas') lineCanvas;
   private lineChart: any;
@@ -25,9 +79,9 @@ export class HomePage {
   @ViewChild('barCanvas') barCanvas;
   private barChart: any;
 
-  @ViewChild('doughnutCanvas') doughnutCanvas;
-  private doughnutChart: any;
-  items2;
+  @ViewChild('threatLevelCanvas') threatLevelCanvas;
+  private barChart2: any;
+  level;
   xArray2: any[] = [];
   yArray2: any[] = [];
 
@@ -47,18 +101,18 @@ export class HomePage {
         this.basicBarChart(this.xArray, this.yArray);
       });
 
-      /*this.items2 = firebase.database().ref('chart/threatleveldata').orderByKey();
-      this.items2.on('value', (snapshot) => {
+      this.level = firebase.database().ref('chart/threatleveldata').orderByKey();
+      this.level.on('value', (snapshot) => {
         //empty array and repopulate when adding new data
         this.xArray2.splice(0, this.xArray2.length);
         this.yArray2.splice(0, this.yArray2.length);
-        //add data to array
+        //adds data to array
         snapshot.forEach((childSnapshot) => {
           this.xArray2.push(childSnapshot.key);
           this.yArray2.push(childSnapshot.val());
         });
-        this.basicDoughnutChart(this.xArray2, this.yArray2);
-      });*/
+        this.threatLevelBar(this.xArray2, this.yArray2);
+      });
     }
 
     //key is xArray, value is yArray
@@ -114,21 +168,7 @@ export class HomePage {
           lineTension: 0.1,
           backgroundColor: 'rgba(72,138,255,0.4)',
           borderColor: 'rgba(72,138,255,1)',
-          /*borderCapStye: 'butt',
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(72,138,255,1)',
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 8,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(72,138,255,1)',
-          pointHoverBorderColor: 'rgba(220,220,220,1)',
-          pointHoverBorderWidth: 2,
-          pointRadius: 3,
-          pointHitRadius: 10,*/
           data: value,
-          /*spanGaps: false,*/
         }]
       },
       options: {
@@ -144,46 +184,32 @@ export class HomePage {
     });
     }
 
-    /*basicDoughnutChart(key, value) {
-      this.barChart = new Chart(this.doughnutCanvas.nativeElement, {
-        type: 'doughnut',
+    threatLevelBar(key, value) {
+      this.barChart2 = new Chart(this.threatLevelCanvas.nativeElement, {
+        type: 'bar',
         data: {
           labels: key,
           datasets: [{
-          label: "Threat Events",*/
-         /* fill: true,
+          label: "Threat Events",
+          fill: true,
           lineTension: 0.1,
           backgroundColor: 'rgba(72,138,255,0.4)',
-          borderColor: 'rgba(72,138,255,1)',*/
-          /*borderCapStye: 'butt',
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(72,138,255,1)',
-          pointBackgroundColor: '#fff',
-          pointBorderWidth: 8,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(72,138,255,1)',
-          pointHoverBorderColor: 'rgba(220,220,220,1)',
-          pointHoverBorderWidth: 2,
-          pointRadius: 3,
-          pointHitRadius: 10,*/
-          //data: value,
-          /*spanGaps: false,*/
-     /*   }]
+          borderColor: 'rgba(72,138,255,1)',
+          data: value,
+        }]
       },
       options: {
         scales: {
           xAxes: [{
             scaleLabel: {
               display: true,
-              labelString: 'Year'
+              labelString: 'Threat Level'
             }
           }],
         }
       }
     });
-    }*/
+    }
 
   //display current date
   public date: string = new Date().toDateString();
