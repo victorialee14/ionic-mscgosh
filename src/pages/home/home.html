@@ -14,15 +14,12 @@
             <ion-grid>
               <ion-row>
               <ion-col>
-          <h4>Threat Level: <strong>{{ defaultThreatVal }}</strong>
-<br>
-<br>
-          Predicted Threat Level: <strong>{{ prediction }} {{ outputThreat }}</strong>
+          <h4>
+          Threat Event Anomalies: <input type="number" placeholder="Threat Events" (change)="predict($event.target.value)">
 
-<input type="number" placeholder="Threat Events" (change)="predict($event.target.value)"></h4>
-          </ion-col>
-          <ion-col>
-            <h4>Events: <strong>50</strong></h4>
+          <br><br>Predicted Threat Level: <strong>{{ prediction }}</strong>
+
+</h4>
           </ion-col>
         </ion-row>
       </ion-grid>

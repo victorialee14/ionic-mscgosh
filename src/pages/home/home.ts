@@ -20,6 +20,7 @@ export class HomePage {
 
   linearModel: tf.Sequential;
   prediction: any;
+  predictionNumber: any;
 
   ngOnInit() {
     this.train();
@@ -48,18 +49,22 @@ export class HomePage {
 
   predict(val: number) {
   const output = this.linearModel.predict(tf.tensor2d([val], [1, 1])) as any;
+  
+  //outputs number that determines threshold for threat level
   this.prediction = Array.from(output.dataSync())[0]
+  this.predictionNumber = Math.abs(this.prediction)
 
-  if (this.prediction > 5) {
+  //threat level defined by predicted output from linear regression model
+  if (Math.abs(this.prediction) > 5) {
     this.prediction = "Critical";
   }
-  else if (this.prediction > 4 && this.prediction <= 5) {
+  else if (Math.abs(this.prediction) > 4 && Math.abs(this.prediction) <= 5) {
     this.prediction = "Severe";
   }
-  else if (this.prediction > 3 && this.prediction <= 4) {
+  else if (Math.abs(this.prediction) > 3 && Math.abs(this.prediction) <= 4) {
     this.prediction = "Elevated";
   }
-  else if (this.prediction > 2 && this.prediction <= 3) {
+  else if (Math.abs(this.prediction) > 2 && Math.abs(this.prediction) <= 3) {
     this.prediction = "Moderate";
   }
   else {
