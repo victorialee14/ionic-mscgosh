@@ -17,7 +17,7 @@
           <h4>
           Threat Event Anomalies: <input type="number" placeholder="Threat Events" (change)="predict($event.target.value)">
 
-          <br><br>Predicted Threat Level: <strong>{{ prediction }}</strong>
+          <br><br>Predicted Threat Level: <strong style="text-transform:uppercase;">{{ prediction }}</strong>
 
 </h4>
           </ion-col>
@@ -101,6 +101,7 @@
                 [data]="doughnutChartData"
                 [labels]="doughnutChartLabels"
                 [chartType]="doughnutChartType"
+                [colors]="doughnutChartColor"
                 (chartHover)="chartHovered($event)"
                 (chartClick)="chartClicked($event)"></canvas>
 

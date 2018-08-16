@@ -252,13 +252,13 @@ export class HomePage {
 
   datasets: any[] = [{
     type: 'line',
-    data: [Math.random()*100],
+    data: [],
     label: 'Series A',
     lineTension: 0,
     borderDash: [8, 4]
   }, {
     type: 'line',
-    data: [Math.random()*100],
+    data: [],
     label: 'Series B'
   }];
   options: any = {
@@ -283,7 +283,7 @@ export class HomePage {
     }
 }
  
-  public barChartOptions:any = {
+  /*public barChartOptions:any = {
   scaleShowVerticalLines: false,
   responsive: true
 };
@@ -294,7 +294,7 @@ public barChartLegend:boolean = true;
 public barChartData:any[] = [
   {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
   {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
-];
+];*/
 // events
 public chartClicked(e:any):void {
   console.log(e);
@@ -304,7 +304,7 @@ public chartHovered(e:any):void {
   console.log(e);
 }
 
-public randomize():void {
+/*public randomize():void {
 // Only Change 3 values
 let data = [
 Math.round(Math.random() * 100),
@@ -317,12 +317,32 @@ Math.round(Math.random() * 100),
 let clone = JSON.parse(JSON.stringify(this.barChartData));
 clone[0].data = data;
 this.barChartData = clone;
-}
+}*/
 
 // Doughnut
-public doughnutChartLabels:string[] = ['Critical', 'Elevated', 'Moderate'];
-public doughnutChartData:number[] = [55, 65, 30];
+public doughnutChartLabels:Array<any> = this.xArray2;
+public doughnutChartData:Array<any> = this.yArray2;
 public doughnutChartType:string = 'doughnut';
+public doughnutChartColor:Array<any> = [
+{
+  backgroundColor: 'rgba(72,138,255,0.4)'
+}
+/*{
+  backgroundColor: 'rgba(255, 0, 0, 0.8)'
+},
+{
+  backgroundColor: 'rgba(233, 112, 37, 0.8)'
+},
+  {
+    backgroundColor: 'rgba(232, 232, 38, 0.8)'
+  },
+  {
+    backgroundColor: 'rgba(143, 240, 117, 0.8)'
+  },
+  {
+    backgroundColor: 'rgba(117, 212, 240, 0.8)'
+  }*/
+]
 
 public lineChartData:Array<any> = [
   {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
