@@ -22,6 +22,7 @@
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
     "@ionic-native/core": "4.8.0",
+    "@ionic-native/keyboard": "^4.11.0",
     "@ionic-native/push": "^4.11.0",
     "@ionic-native/splash-screen": "4.8.0",
     "@ionic-native/status-bar": "4.8.0",
@@ -33,6 +34,7 @@
     "chartjs-plugin-streaming": "^1.5.0",
     "firebase": "^3.9.0",
     "ionic-angular": "3.9.2",
+    "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
     "ng2-charts": "^1.6.0",
     "papaparse": "^4.6.0",
@@ -48,7 +50,8 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "phonegap-plugin-push": {}
+      "phonegap-plugin-push": {},
+      "ionic-plugin-keyboard": {}
     }
   }
 }

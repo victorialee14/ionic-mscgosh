@@ -6,6 +6,9 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { ViewChild } from '@angular/core';
 import firebase from 'firebase';
 
+import { AlertController } from 'ionic-angular';
+//import { Keyboard } from '@ionic-native/keyboard';
+
 import 'chartjs-plugin-streaming';
 
 import * as tf from '@tensorflow/tfjs';
@@ -16,81 +19,10 @@ import * as tf from '@tensorflow/tfjs';
   templateUrl: 'home.html'
 })
 
+
 export class HomePage {
 
-  linearModel: tf.Sequential;
-  prediction: any;
-  predictionNumber: any;
-
-  ngOnInit() {
-    this.train();
-  }
-
-
-  async train(): Promise<any> {
-     // Define a model for linear regression.
-  this.linearModel = tf.sequential();
-  this.linearModel.add(tf.layers.dense({units: 1, inputShape: [1]}));
-
-  // Prepare the model for training: Specify the loss and the optimizer.
-  this.linearModel.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
-
-
-  // Training data, completely random stuff
-  const xs = tf.tensor1d([3, 4, 5]);
-  const ys = tf.tensor1d([6, 7, 8]);
-
-
-  // Train
-  await this.linearModel.fit(xs, ys)
-
-  console.log('model trained!')
-}
-
-  predict(val: number) {
-  const output = this.linearModel.predict(tf.tensor2d([val], [1, 1])) as any;
-  
-  //outputs number that determines threshold for threat level
-  this.prediction = Array.from(output.dataSync())[0]
-  this.predictionNumber = Math.abs(this.prediction)
-
-  //threat level defined by predicted output from linear regression model
-  if (Math.abs(this.prediction) > 5) {
-    this.prediction = "Critical";
-  }
-  else if (Math.abs(this.prediction) > 4 && Math.abs(this.prediction) <= 5) {
-    this.prediction = "Severe";
-  }
-  else if (Math.abs(this.prediction) > 3 && Math.abs(this.prediction) <= 4) {
-    this.prediction = "Elevated";
-  }
-  else if (Math.abs(this.prediction) > 2 && Math.abs(this.prediction) <= 3) {
-    this.prediction = "Moderate";
-  }
-  else {
-    this.prediction = "Low";
-  }
-}
-
-public defaultThreatVal: number = 2;
-
-
-  @ViewChild('lineCanvas') lineCanvas;
-  private lineChart: any;
-  items;
-  xArray: any[] = [];
-  yArray: any[] = [];
-
-  @ViewChild('barCanvas') barCanvas;
-  private barChart: any;
-
-  @ViewChild('threatLevelCanvas') threatLevelCanvas;
-  private barChart2: any;
-  level;
-  xArray2: any[] = [];
-  yArray2: any[] = [];
-
-  constructor(public navCtrl: NavController, private db: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, private db: AngularFireDatabase, private alertCtrl: AlertController) {
       //selects data from chart node
       this.items = firebase.database().ref('chart/data').orderByKey();
       this.items.on('value', (snapshot) => {
@@ -118,7 +50,106 @@ public defaultThreatVal: number = 2;
         });
         this.threatLevelBar(this.xArray2, this.yArray2);
       });
+
+    //data for linear regression model
+      this.lrData = firebase.database().ref('chart/linregdata').orderByKey();
+      this.lrData.on('value', (snapshot) => {
+        //empty array and repopulate when adding new data
+        this.xArray3.splice(0, this.xArray.length);
+        this.yArray3.splice(0, this.yArray.length);
+        //adds data to array
+        snapshot.forEach((childSnapshot) => {
+          this.xArray3.push(childSnapshot.key);
+          this.yArray3.push(childSnapshot.val());
+        });
+      });
     }
+
+  presentAlert() {
+  let alert = this.alertCtrl.create({
+    title: '<h5>Threat Level Alert</h5>',
+    subTitle: 'Threat Level is <strong>' + this.prediction + '</strong>',
+    buttons: ['Dismiss']
+  });
+  alert.present();
+}
+
+  linearModel: tf.Sequential;
+  prediction: any;
+  predictionNumber: any;
+  lrData;
+  xArray3: any[] = [];
+  yArray3: any[] = [];
+
+  ngOnInit() {
+    this.train();
+  }
+
+  async train(): Promise<any> {
+     // Define a model for linear regression.
+  this.linearModel = tf.sequential();
+  this.linearModel.add(tf.layers.dense({units: 1, inputShape: [1]}));
+
+  // Prepare the model for training: Specify the loss and the optimizer.
+  this.linearModel.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+
+
+  // Training data, completely random stuff
+   const xs = tf.tensor1d(this.xArray3);
+  const ys = tf.tensor1d(this.yArray3);
+
+  // Train
+  await this.linearModel.fit(xs, ys)
+
+  console.log('model trained!')
+
+}
+
+  predict(val: number) {
+  const output = this.linearModel.predict(tf.tensor2d([val], [1, 1])) as any;
+  
+  //outputs number that determines threshold for threat level
+  this.prediction = Array.from(output.dataSync())[0]
+  this.predictionNumber = Math.abs(this.prediction)
+
+  //threat level defined by predicted output from linear regression model
+  if (Math.abs(this.prediction) > 5) {
+    this.prediction = "Critical";
+    this.presentAlert();
+  }
+  else if (Math.abs(this.prediction) > 4 && Math.abs(this.prediction) <= 5) {
+    this.prediction = "Severe";
+    this.presentAlert();
+  }
+  else if (Math.abs(this.prediction) > 3 && Math.abs(this.prediction) <= 4) {
+    this.prediction = "Elevated";
+    this.presentAlert();
+  }
+  else if (Math.abs(this.prediction) > 2 && Math.abs(this.prediction) <= 3) {
+    this.prediction = "Moderate";
+  }
+  else {
+    this.prediction = "Low";
+  }
+}
+
+//public defaultThreatVal: number = 2;
+
+
+  @ViewChild('lineCanvas') lineCanvas;
+  private lineChart: any;
+  items;
+  xArray: any[] = [];
+  yArray: any[] = [];
+
+  @ViewChild('barCanvas') barCanvas;
+  private barChart: any;
+
+  @ViewChild('threatLevelCanvas') threatLevelCanvas;
+  private barChart2: any;
+  level;
+  xArray2: any[] = [];
+  yArray2: any[] = [];
 
     //key is xArray, value is yArray
     basicLineChart(key, value) {
