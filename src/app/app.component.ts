@@ -8,6 +8,7 @@ import { Streaming } from 'chartjs-plugin-streaming';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import * as tf from '@tensorflow/tfjs';
+import {Chart} from 'chart.js';
 
 @Component({
   selector: 'app-root',

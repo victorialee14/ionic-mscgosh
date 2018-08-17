@@ -86,7 +86,7 @@ export class HomePage {
   }
 
   async train(): Promise<any> {
-     // Define a model for linear regression.
+     // Define linear regression model
   this.linearModel = tf.sequential();
   this.linearModel.add(tf.layers.dense({units: 1, inputShape: [1]}));
 
@@ -94,7 +94,7 @@ export class HomePage {
   this.linearModel.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
 
 
-  // Training data, completely random stuff
+  // Training data pulled from AngularFirebase database.
    const xs = tf.tensor1d(this.xArray3);
   const ys = tf.tensor1d(this.yArray3);
 
@@ -114,22 +114,22 @@ export class HomePage {
 
   //threat level defined by predicted output from linear regression model
   if (Math.abs(this.prediction) > 5) {
-    this.prediction = "Critical";
+    this.prediction = "Critical (1)";
     this.presentAlert();
   }
   else if (Math.abs(this.prediction) > 4 && Math.abs(this.prediction) <= 5) {
-    this.prediction = "Severe";
+    this.prediction = "Severe (2)";
     this.presentAlert();
   }
   else if (Math.abs(this.prediction) > 3 && Math.abs(this.prediction) <= 4) {
-    this.prediction = "Elevated";
+    this.prediction = "Elevated (3)";
     this.presentAlert();
   }
   else if (Math.abs(this.prediction) > 2 && Math.abs(this.prediction) <= 3) {
-    this.prediction = "Moderate";
+    this.prediction = "Moderate (4)";
   }
   else {
-    this.prediction = "Low";
+    this.prediction = "Low (5)";
   }
 }
 
@@ -250,6 +250,7 @@ export class HomePage {
   //display current date
   public date: string = new Date().toDateString();
 
+
   datasets: any[] = [{
     type: 'line',
     data: [],
@@ -261,26 +262,26 @@ export class HomePage {
     data: [],
     label: 'Series B'
   }];
+
   options: any = {
     scales: {
       xAxes: [{
         type: 'realtime'}],
       plugins: {
       streaming: {
-        duration: 20000, 
-                refresh: 1000,   
-                delay: 1000,   
-                pause: false, 
                 // a callback to update datasets
-                onRefresh: function(chart) {
-                    chart.data.datasets[0].data.push({
-                        x: Date.now(),
-                        y: Math.random() * 100
-                    });
-                }
-            }
+                onRefresh: function(chart: any) {
+                    chart.datasets.forEach(function(datasets: any){
+                      datasets.data.push(
+                        Date.now(),
+                        Math.random() * 100
+                    );
+                });
+            },
+            delay: 2000
         }
     }
+  }
 }
  
   /*public barChartOptions:any = {
